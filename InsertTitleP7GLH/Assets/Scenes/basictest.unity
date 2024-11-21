@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3bd9b672230ef145aebfb930efa04d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 15
+  moveSpeed: 20
   groundDrag: 5
   playerHeight: 2
   whatIsGround:
@@ -195,7 +195,7 @@ MonoBehaviour:
   grounded: 0
   jumpForce: 80
   jumpCooldownTime: 0.05
-  airMultiplier: 5
+  airMultiplier: 2
   jumpkey: 32
   orientation: {fileID: 2102450926}
 --- !u!1 &189440458
@@ -371,6 +371,7 @@ GameObject:
   - component: {fileID: 1259033512}
   - component: {fileID: 1259033511}
   - component: {fileID: 1259033510}
+  - component: {fileID: 1259033514}
   m_Layer: 0
   m_Name: PlayerObj
   m_TagString: Untagged
@@ -457,6 +458,20 @@ Transform:
   m_Father: {fileID: 78072493}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1259033514
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259033509}
+  m_Material: {fileID: 13400000, guid: 27ee53315050b8343ab628afac6980d6, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.55
+  m_Height: 1.95
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1575533281
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +760,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.05
   far clip plane: 1000
   field of view: 90
   orthographic: 0
