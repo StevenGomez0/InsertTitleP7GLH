@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    private float moveSpeed;
+    public float walkSpeed = 20;
 
     public float groundDrag;
 
@@ -13,12 +14,17 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     [SerializeField] bool grounded;
 
+    public float sliding;
+    public float crouchYScale;
+    private float startYScale;
+
     public float jumpForce;
     public float jumpCooldownTime;
     public float airMultiplier;
     bool jumpCD;
 
     public KeyCode jumpkey = KeyCode.Space;
+    public KeyCode slidekey = KeyCode.LeftControl;
 
     public Transform orientation;
 
@@ -29,10 +35,20 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    public MovementState state;
+    public enum MovementState
+    {
+        walking,
+        sliding,
+        air
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        startYScale = transform.localScale.y;
     }
 
     private void Update()
@@ -41,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
         SpeedControl();
+        StateHandler();
 
         if (grounded) { 
         rb.drag = groundDrag;
@@ -59,11 +76,45 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
+        //jump
         if(Input.GetKey(jumpkey) && !jumpCD && grounded)
         {
             jumpCD = true;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldownTime);
+        }
+
+        //start crouch
+        if(Input.GetKey(slidekey) && grounded)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+
+        //end crouch
+        if (Input.GetKeyUp(slidekey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
+    }
+
+    private void StateHandler()
+    {
+        //walking
+        if (grounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+        }
+        if (Input.GetKeyDown(slidekey) && grounded)
+        {
+            state = MovementState.sliding;
+            //sliding movement equation
+        }
+        //air
+        else
+        {
+            state = MovementState.air;  
         }
     }
 
