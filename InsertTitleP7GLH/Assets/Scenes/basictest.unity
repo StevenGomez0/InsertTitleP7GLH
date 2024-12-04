@@ -188,13 +188,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 80
   groundDrag: 3.5
-  slidingDrag: 1
-  airDrag: 0.5
+  slidingDrag: 2
+  airDrag: 2
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 2147483648
   grounded: 0
+  sliding: 0
   crouchYScale: 0.5
   jumpForce: 150
   jumpCooldownTime: 0.02
