@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed = 20;
 
+    public Gun1 Gun1;
+
     private float startGroundDrag;
     public float groundDrag;
     public float slidingDrag;
@@ -50,6 +52,12 @@ public class PlayerMovement : MonoBehaviour
         walking,
         sliding,
         air
+    }
+
+    public enum GunState
+    {
+        gun1,
+        gun2
     }
 
     private void Start()
