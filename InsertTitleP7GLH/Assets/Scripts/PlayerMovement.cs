@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -27,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     [SerializeField] bool grounded;
     [SerializeField] bool sliding;
+
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
     public float crouchYScale;
     private float startYScale;
@@ -129,8 +133,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.down * 10f, ForceMode.Impulse);
             if (Input.GetKeyDown(slidekey))
             {
-               // Debug.Log("sliding");
-                rb.AddForce(orientation.forward * moveSpeed, ForceMode.Impulse);
+                rb.AddForce(orientation.forward * moveSpeed * 3.0f, ForceMode.Impulse);
             }
         }
 
@@ -166,17 +169,23 @@ public class PlayerMovement : MonoBehaviour
     
     private void MovePlayer()
     {
-        //movement calc
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        if (!sliding)
+        {
+            //movement calc
+            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        
-        
+            if (OnSlope())
+            {
+                rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 5f, ForceMode.Force);
+            }
 
-        if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10, ForceMode.Force);
 
-        else if(!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10 * airMultiplier, ForceMode.Force);
+            if (grounded)
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10, ForceMode.Force);
+
+            else if (!grounded)
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10 * airMultiplier, ForceMode.Force);
+        }
     }
 
     private void SpeedControl()
@@ -199,6 +208,22 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         jumpCD = false;
+    }
+
+    private bool OnSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
 
     public void Damaged(float damage, Transform enemy)

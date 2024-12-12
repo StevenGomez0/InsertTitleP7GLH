@@ -10,11 +10,11 @@ public class StartButton : MonoBehaviour
     private void Start()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(clicked);
+        //button.onClick.AddListener(clicked);
     }
     private void clicked()
     {
         //MAKE SURE THIS ACTUALLY HAS THE SCENE NAME BEFORE SUBMITTING
-        SceneManager.LoadScene("basictest");
+        //SceneManager.LoadScene("basictest");
     }
 }
