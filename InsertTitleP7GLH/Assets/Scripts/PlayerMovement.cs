@@ -3,12 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public UnityEvent OnDeath;
+
     private float moveSpeed;
     public float walkSpeed = 20;
+
+    private float startingHealth;
+    public float Health;
 
     public Gun1 Gun1;
 
@@ -40,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 moveDirection;
 
-    Rigidbody rb;
+    public Rigidbody rb;
 
     public float tempDampTime;
     private float tempx;
@@ -62,6 +68,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        startingHealth = Health;
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -71,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(rb.velocity.normalized);
+       // Debug.Log(rb.velocity.normalized);
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         
 
@@ -191,5 +199,16 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         jumpCD = false;
+    }
+
+    public void Damaged(float damage, Transform enemy)
+    {
+        Debug.Log("IS EXPLODING");
+        Health -= damage;
+        rb.AddExplosionForce(damage, enemy.position, 10, 0);
+        if (Health <= 0)
+        {
+            OnDeath?.Invoke();
+        }
     }
 }

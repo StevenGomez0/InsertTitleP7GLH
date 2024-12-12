@@ -18,7 +18,7 @@ public class Gun1 : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             if (currentCD <= 0f)
             {
