@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    private AudioSource audiosr;
+    public AudioClip deathclip;
     [SerializeField] private float StartingHealth;
     public float health;
+    private MeshRenderer mesh;
 
     void Start()
     {
+        mesh = GetComponent<MeshRenderer>();
+        audiosr = GetComponent<AudioSource>();
         health = StartingHealth;
     }
     public float Health
@@ -24,8 +29,15 @@ public class Entity : MonoBehaviour
 
             if(health <= 0)
             {
-                Destroy(gameObject);
+                Destroy(mesh);
+                audiosr.PlayOneShot(deathclip);
+                Invoke(nameof(DestroyObject), deathclip.length);
             }
         }
+    }
+
+    private void DestroyObject()
+    {
+        Destroy(gameObject);
     }
 }
