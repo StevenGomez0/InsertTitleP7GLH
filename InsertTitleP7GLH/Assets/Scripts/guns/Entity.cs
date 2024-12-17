@@ -9,12 +9,16 @@ public class Entity : MonoBehaviour
     [SerializeField] private float StartingHealth;
     public float health;
     private MeshRenderer mesh;
+    private SphereCollider colliderr;
+    public bool isDead;
+    [Range(0, 1)] public float deathSFXVolume;
 
     void Start()
     {
         mesh = GetComponent<MeshRenderer>();
         audiosr = GetComponent<AudioSource>();
         health = StartingHealth;
+        colliderr = GetComponent<SphereCollider>();
     }
     public float Health
     {
@@ -29,8 +33,10 @@ public class Entity : MonoBehaviour
 
             if(health <= 0)
             {
-                Destroy(mesh);
-                audiosr.PlayOneShot(deathclip);
+                isDead = true;
+                mesh.enabled = false;
+                Destroy(colliderr);
+                audiosr.PlayOneShot(deathclip, deathSFXVolume);
                 Invoke(nameof(DestroyObject), deathclip.length);
             }
         }

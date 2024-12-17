@@ -1,20 +1,26 @@
-using JetBrains.Annotations;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
     public UnityEvent OnDeath;
+    private bool isDead;
+    public UnityEvent OnHit;
+
+    public Image healthBar;
+
+    private bool slideBoostCD;
+    public float slideBoostCDValue;
+
+    public float InvincibilityLength;
+    private bool isInvincible;
 
     private float moveSpeed;
     public float walkSpeed = 20;
+    public float gravityMultiplier;
 
-    private float startingHealth;
+    public float startingHealth; //is there a way to make a variable not visible on inspector but accessable by other scripts? that would be very nice here (thats not static)
     public float Health;
 
     public Gun1 Gun1;
@@ -52,9 +58,9 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody rb;
 
-    public float tempDampTime;
+    /*  unused floats    public float tempDampTime;
     private float tempx;
-    private float tempz;
+    private float tempz;*/
 
     public MovementState state;
     public enum MovementState
@@ -72,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+
         startingHealth = Health;
 
         rb = GetComponent<Rigidbody>();
@@ -96,19 +103,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             rb.drag = airDrag;
-
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0 && grounded && !sliding)
-        {
-            //so this should quickly stop movement if there is no input in any direction, im doing this intstead of adjusting drag to not mess with the movespeed or something
-            //
-            //rb.velocity = Vector3.zero;
-            rb.velocity = new Vector3(Mathf.SmoothDamp(rb.velocity.x, 0, ref tempx, tempDampTime), 0, Mathf.SmoothDamp(rb.velocity.z, 0, ref tempz, tempDampTime));
-        }
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if(!isDead) MovePlayer();
     }
 
     private void MyInput()
@@ -131,10 +130,13 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             groundDrag = slidingDrag;
             rb.AddForce(Vector3.down * 10f, ForceMode.Impulse);
-            if (Input.GetKeyDown(slidekey))
+            if (Input.GetKeyDown(slidekey) && !slideBoostCD)
             {
                 rb.AddForce(orientation.forward * moveSpeed * 3.0f, ForceMode.Impulse);
             }
+            Debug.Log("slide boost cooldown on");
+            if (!slideBoostCD) Invoke(("slideBoostTimer"), slideBoostCDValue);
+            slideBoostCD = true;
         }
 
         //end crouch
@@ -143,6 +145,15 @@ public class PlayerMovement : MonoBehaviour
             sliding = false;
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
             groundDrag = startGroundDrag;
+        }
+
+        if (transform.position.x > 70 || transform.position.x < -70 || transform.position.z > 70 || transform.position.z < -70 || transform.position.y < -10 || transform.position.y > 50)
+        {
+            if(Health > 0)
+            {
+                Debug.Log("out of bounds, killed");
+                Damaged(Health);
+            }
         }
     }
 
@@ -169,6 +180,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void MovePlayer()
     {
+        if(!grounded) rb.AddForce(Vector3.down * 600 * gravityMultiplier);
         if (!sliding)
         {
             //movement calc
@@ -226,14 +238,36 @@ public class PlayerMovement : MonoBehaviour
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
 
-    public void Damaged(float damage, Transform enemy)
+    public void Damaged(float damage)
     {
         Debug.Log("IS EXPLODING");
-        Health -= damage;
-        rb.AddExplosionForce(damage, enemy.position, 10, 0);
+        if (!isInvincible)
+        {
+            Health -= damage;
+            OnHit?.Invoke();
+            isInvincible = true;
+            Invoke("boolTimer", InvincibilityLength);
+        }
+        else 
+        { 
+            Debug.Log("invincible, null damage"); 
+        }
         if (Health <= 0)
         {
+            isDead = true;
             OnDeath?.Invoke();
         }
+    }
+
+    void boolTimer()
+    {
+        isInvincible = false;
+    }
+
+    void slideBoostTimer()
+    {
+        //i know this is a really redundant method because theres a perfectly functional method right above it but i cant think critically rn (11:30 pm)
+        Debug.Log("slide cd off");
+        slideBoostCD = false;
     }
 }
