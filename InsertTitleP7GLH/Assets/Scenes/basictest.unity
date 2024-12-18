@@ -528,7 +528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &430539506
 RectTransform:
   m_ObjectHideFlags: 0
@@ -542,6 +542,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1365057459}
+  - {fileID: 690770948}
   m_Father: {fileID: 1966213621}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -770,17 +771,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 690770947}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.36073, y: 0.2521156, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2073504406}
-  m_Father: {fileID: 1966213621}
+  m_Father: {fileID: 430539506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -291, y: 127.1201}
+  m_AnchoredPosition: {x: -0.000061035156, y: -90.751495}
   m_SizeDelta: {x: 0, y: -45.7602}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &690770950
@@ -2783,7 +2784,6 @@ RectTransform:
   m_Children:
   - {fileID: 1273417981}
   - {fileID: 430539506}
-  - {fileID: 690770948}
   - {fileID: 864622765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2953,7 +2953,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   killCounterText: {fileID: 1365057460}
-  waveCounterText: {fileID: 0}
+  waveCounterText: {fileID: 2073504407}
   enemyPrefab: {fileID: 7646775936132996108, guid: 24bc9109d6443fa479815862ea66d56e, type: 3}
   healthPrefab: {fileID: 796934295162797105, guid: 780c6a16c4ebb104485e4f31afd0ef42, type: 3}
 --- !u!114 &2017314435
