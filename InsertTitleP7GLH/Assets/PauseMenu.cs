@@ -33,10 +33,14 @@ public class PauseMenu : MonoBehaviour
         // Pause or resume the game
         if (isPaused)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             Time.timeScale = 0f; // Pause the game
         }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             Time.timeScale = 1f; // Resume the game
         }
     }

@@ -20,7 +20,7 @@ public class Gun1 : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (currentCD <= 0f)
+            if (currentCD <= 0f && Time.timeScale != 0)
             {
                 muzzleFlash.Play();
                 //add animation maybe if i have time

@@ -32,6 +32,7 @@ public class EnemyNav : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         plr = GameObject.Find("Player");
         plrScript = plr.GetComponent<PlayerMovement>();
+        player = plr.transform;
     }
 
     // Update is called once per frame
@@ -69,7 +70,7 @@ public class EnemyNav : MonoBehaviour
     {
         if (!attackCD && !entity.isDead)
         {
-            plrScript.rb.AddExplosionForce(2000, transform.position, 25, 1.5f, ForceMode.Impulse);
+            plrScript.rb.AddExplosionForce(3000, transform.position, 25, 1.5f, ForceMode.Impulse);
             plrScript.Damaged(damage); //this gives an error msg in playmode despite nothing going wrong for some reason, just ignore it
             attackCD = true;
             Invoke(nameof(ResetAttack), attackInterval);

@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed = 20;
     public float gravityMultiplier;
 
-    public float startingHealth; //is there a way to make a variable not visible on inspector but accessable by other scripts? that would be very nice here (thats not static)
+    [HideInInspector] public float startingHealth; //fancy variable thingies ooo i will use these more often
     public float Health;
 
     public Gun1 Gun1;
@@ -98,8 +98,10 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
         StateHandler();
 
-        if (grounded) { rb.drag = groundDrag; 
-        //Debug.Log("grounded");
+        if (grounded)
+        { 
+            rb.drag = groundDrag; 
+            //Debug.Log("grounded");
         }
         else
             rb.drag = airDrag;

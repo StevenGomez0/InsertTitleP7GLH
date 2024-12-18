@@ -13,8 +13,14 @@ public class Entity : MonoBehaviour
     public bool isDead;
     [Range(0, 1)] public float deathSFXVolume;
 
+    private GameObject gameManager;
+    private KillCounter waveSys;
+
     void Start()
     {
+        gameManager = GameObject.Find("GameManager");
+        waveSys = gameManager.GetComponent<KillCounter>();
+
         mesh = GetComponent<MeshRenderer>();
         audiosr = GetComponent<AudioSource>();
         health = StartingHealth;
@@ -29,10 +35,11 @@ public class Entity : MonoBehaviour
         set
         {
             health = value;
-            Debug.Log(health);
+            //Debug.Log(health);
 
             if(health <= 0)
             {
+                waveSys.OnEnemyKilled();
                 isDead = true;
                 mesh.enabled = false;
                 Destroy(colliderr);

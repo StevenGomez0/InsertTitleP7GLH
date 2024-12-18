@@ -46,7 +46,7 @@ public class DismissPanel : MonoBehaviour
     }
 
     
-    public void OnEnemyKilled()
+    /*public void OnEnemyKilled()
     {
         enemiesKilled++;
         UpdateKillCounter();
@@ -61,5 +61,6 @@ public class DismissPanel : MonoBehaviour
     void UpdateKillCounter()
     {
         killCounterText.text = $"Enemies Killed: {enemiesKilled} / {totalEnemies}";
-    }
+    } 
+    not sure why this is here, commenting out for now */
 }
