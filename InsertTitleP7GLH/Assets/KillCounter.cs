@@ -12,16 +12,19 @@ public class KillCounter : MonoBehaviour
     private float spawnRangeMin = 35;
     private float spawnRangeMax = 45;
     public TMP_Text killCounterText;
+    public TMP_Text waveCounterText;
     private int totalEnemies;  
     private int enemiesKilled = 0;
     private int EnemiesToSpawn;
     private int WaveCount = 0;
     public GameObject enemyPrefab;
+    public GameObject healthPrefab;
 
     void Start()
     {
         // Initialize the kill counter display
         UpdateKillCounter();
+        UpdateWaveCounter();
         if (EnemiesToSpawn == 0) EnemiesToSpawn = 1;
         SpawnEnemyWave(EnemiesToSpawn);
     }
@@ -44,6 +47,13 @@ public class KillCounter : MonoBehaviour
         return randomPos; 
     }
 
+    public Vector3 healthSpawnPos()
+    {
+        float xPos = Random.Range(-15, 15);
+        float zPos = Random.Range(-15, 15);
+        return new Vector3 (xPos, 11, zPos);
+    }
+
     void SpawnEnemyWave(int enemiesSpawning)
     {
         UnityEngine.Debug.Log("Spawning enemies, " + enemiesSpawning + " total.");
@@ -53,6 +63,7 @@ public class KillCounter : MonoBehaviour
         {
             Instantiate(enemyPrefab, GenerateSpawnPos(), Quaternion.identity);
         }
+        Instantiate(healthPrefab, healthSpawnPos(), Quaternion.identity);
     }
 
     // Call this method whenever an enemy is killed
@@ -68,6 +79,7 @@ public class KillCounter : MonoBehaviour
             EnemiesToSpawn = WaveCount * 3;
             SpawnEnemyWave(EnemiesToSpawn);
             UpdateKillCounter();
+            UpdateWaveCounter();
             UnityEngine.Debug.Log("All enemies defeated!"); //why is this ambiguous when not defined by unityengine???? confusing
         }
     }
@@ -76,5 +88,11 @@ public class KillCounter : MonoBehaviour
     void UpdateKillCounter()
     {
         killCounterText.text = $"Enemies Killed: {enemiesKilled} / {totalEnemies}";
+    }
+
+    void UpdateWaveCounter()
+    {
+        UnityEngine.Debug.Log("wave text updated");
+        waveCounterText.text = $"Wave Count: {WaveCount}";
     }
 }

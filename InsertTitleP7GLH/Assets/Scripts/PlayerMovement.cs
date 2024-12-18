@@ -261,6 +261,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void Heal(float value)
+    {
+        Debug.Log("Healed " +  value);
+        Health += value;
+        if (Health > startingHealth) Health = startingHealth;
+        OnHit?.Invoke(); //this should work despite it being the onhit thing, since all it does is update health bar 
+    }
+
     void boolTimer()
     {
         isInvincible = false;
